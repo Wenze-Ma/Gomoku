@@ -1,5 +1,6 @@
 import './gomoku.css';
 import {useEffect, useState} from "react";
+import Canvas from "./Canvas";
 
 const GAME_STATE = {
     BLACK_TURN: '黑棋回合',
@@ -9,7 +10,7 @@ const GAME_STATE = {
     DRAW: '平局',
 };
 
-const BOARD_SIZE = 15;
+export const BOARD_SIZE = 15;
 const directions = [[-1, 0], [-1, 1], [0, 1], [1, 1], [1, 0], [1, -1], [0, -1], [-1, -1]];
 
 const Gomoku = () => {
@@ -92,43 +93,49 @@ const Gomoku = () => {
         <div className='body'>
             <div className='mode'>
                 <button className='btn btn-info text' onClick={() => {
+                    // reset();
                     setIsCanvas(!isCanvas);
-                }}>切换
+                }}>切换至{isCanvas ? 'DOM' : 'Canvas'}模式
                 </button>
             </div>
             <div className='text game-status'>当前状态：{gameState}</div>
-            <div className='board-wrapper'>
-                <div className='board'>
-                    {board.map((_, index) => (
-                        <div className='row' key={index}>
-                            {board.map((_, index) => (
-                                <div className='cell' key={index}/>
-                            ))}
-                        </div>
-                    ))}
-                </div>
-                <div className='chess-container'>
-                    {chess.map((row, rowIndex) => (
-                        <div className='row' key={rowIndex}>
-                            {row.map((cell, columnIndex) => (
-                                <div
-                                    className={
-                                        `cell ${cell} ${chessPlaced.length > 0 &&
-                                        chessPlaced[chessPlaced.length - 1][0] === rowIndex &&
-                                        chessPlaced[chessPlaced.length - 1][1] === columnIndex ?
-                                            'last' : ''}`
-                                    }
-                                    key={columnIndex}
-                                    onClick={() => handleCellClick(rowIndex, columnIndex)}>
+            {isCanvas ?
+                <Canvas setChess={setChess} chess={chess} chessPlaced={chessPlaced} setChessPlaced={setChessPlaced}
+                        gameState={gameState} counters={counters} setCounters={setCounters}
+                        handleCellClick={handleCellClick}/> :
+                <div className='board-wrapper'>
+                    <div className='board'>
+                        {board.map((_, index) => (
+                            <div className='row' key={index}>
+                                {board.map((_, index) => (
+                                    <div className='cell' key={index}/>
+                                ))}
+                            </div>
+                        ))}
+                    </div>
+                    <div className='chess-container'>
+                        {chess.map((row, rowIndex) => (
+                            <div className='row' key={rowIndex}>
+                                {row.map((cell, columnIndex) => (
+                                    <div
+                                        className={
+                                            `cell ${cell} ${chessPlaced.length > 0 &&
+                                            chessPlaced[chessPlaced.length - 1][0] === rowIndex &&
+                                            chessPlaced[chessPlaced.length - 1][1] === columnIndex ?
+                                                'last' : ''}`
+                                        }
+                                        key={columnIndex}
+                                        onClick={() => handleCellClick(rowIndex, columnIndex)}>
                                     <span className='counter text'>
                                         {counters[rowIndex][columnIndex] || ''}
                                     </span>
-                                </div>
-                            ))}
-                        </div>
-                    ))}
+                                    </div>
+                                ))}
+                            </div>
+                        ))}
+                    </div>
                 </div>
-            </div>
+            }
             <div className='game-control'>
                 <button className='btn btn-primary text'
                         onClick={reset}
