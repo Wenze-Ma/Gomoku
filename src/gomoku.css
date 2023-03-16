@@ -1,0 +1,169 @@
+:root {
+    --cell-width: 50px;
+    --board-background-color: #DEA350;
+    --font-size: 1.1rem;
+}
+
+.body {
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+}
+
+.board-wrapper {
+    position: relative;
+    display: flex;
+    justify-content: center;
+    background-color: var(--board-background-color);
+}
+
+.board {
+    border: 1px solid;
+    position: absolute;
+    top: calc(var(--cell-width) / 2);
+    pointer-events: none;
+    z-index: 1;
+}
+
+.chess-container {
+    z-index: 2;
+}
+
+.row {
+    width: fit-content;
+    height: var(--cell-width);
+    box-sizing: border-box;
+
+}
+
+.cell {
+    width: var(--cell-width);
+    height: var(--cell-width);
+    border: 1px solid;
+    display: inline-block;
+    box-sizing: border-box;
+    position: relative;
+}
+
+.counter {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.black .counter {
+    color: white;
+}
+
+.white .counter {
+    color: black;
+}
+
+.chess-container .cell {
+    border: none;
+}
+
+.chess-container .cell.empty {
+    cursor: pointer;
+}
+
+.chess-container .cell.empty:hover {
+    border: 2px red solid;
+}
+
+.chess-container .cell.black {
+    border-radius: 50%;
+    background-color: #000;
+}
+
+.chess-container .cell.white {
+    border-radius: 50%;
+    fill: #FFF;
+    background-color: #FFF;
+}
+
+.chess-container .cell.last {
+    border: 2px red solid;
+}
+
+.game-control {
+    display: flex;
+    flex-direction: row;
+    width: calc(var(--cell-width) * 15);
+    margin-top: 10px;
+    justify-content: space-between;
+}
+
+.mode {
+    width: 100%;
+}
+
+.game-status.text {
+    font-size: 1.5rem;
+}
+
+.text {
+    letter-spacing: -0.025rem;
+    font-size: var(--font-size);
+    font-weight: 700;
+    line-height: 1.4;
+    text-transform: uppercase;
+}
+
+
+.btn {
+    border: 0;
+    cursor: pointer;
+    box-shadow: 0 4px 7px -1px rgb(0 0 0 / 11%), 0 2px 4px -1px rgb(0 0 0 / 7%);
+    background-size: 150%;
+    padding: 0.75rem 1.5rem;
+    border-radius: 0.5rem;
+    transition: all .15s ease-in;
+    display: inline-block;
+    color: #fff;
+}
+
+.btn:hover {
+    box-shadow: 0 3px 5px -1px rgba(0, 0, 0, .09), 0 2px 3px -1px rgba(0, 0, 0, .07);
+    transform: scale(1.02)
+}
+
+.btn-info {
+    background-image: linear-gradient(310deg, #2152ff, #21d4fd);
+}
+
+.btn-primary {
+    background-image: linear-gradient(310deg, #7928ca, #ff0080);
+}
+
+.btn-secondary {
+    background-image: linear-gradient(310deg,#627594,#a8b8d8);
+}
+
+@media (max-width: 1200px) {
+    :root {
+        --cell-width: 40px;
+    }
+}
+
+@media (max-width: 640px) {
+    :root {
+        --cell-width: 30px;
+    }
+}
+
+@media (max-width: 480px) {
+    :root {
+        --cell-width: 20px;
+        --font-size: 0.8rem;
+    }
+}
+
+@media (max-width: 350px) {
+    :root {
+        --cell-width: 15px;
+        --font-size: 0.6rem;
+
+    }
+}
