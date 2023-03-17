@@ -141,6 +141,11 @@
     background-image: linear-gradient(310deg,#627594,#a8b8d8);
 }
 
+.btn-ready {
+    background-image: linear-gradient(310deg, #16931f, #48e140);
+}
+
+
 @media (max-width: 1200px) {
     :root {
         --cell-width: 40px;

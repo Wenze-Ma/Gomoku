@@ -20,6 +20,7 @@ const Gomoku = () => {
     const [gameState, setGameState] = useState(GAME_STATE.BLACK_TURN);
     const [chessPlaced, setChessPlaced] = useState([]);
     const [isCanvas, setIsCanvas] = useState(false);
+    const [regretChess, setRegretChess] = useState([]);
 
     useEffect(() => {
         if (chessPlaced.length === 0) return;
@@ -45,9 +46,9 @@ const Gomoku = () => {
         counters[rowIndex][columnIndex] = chessPlaced.length + 1;
         setCounters([...counters]);
         setChess([...chess]);
-        let temp = [...chessPlaced];
-        temp.push([rowIndex, columnIndex]);
-        setChessPlaced(temp);
+        chessPlaced.push([rowIndex, columnIndex]);
+        setChessPlaced([...chessPlaced]);
+        setRegretChess([]);
     };
 
     const checkWin = (color) => {
@@ -74,19 +75,36 @@ const Gomoku = () => {
         if (chessPlaced.length < 2) return;
         for (let i = 0; i < 2; i++) {
             const lastPlaced = chessPlaced.pop();
+            regretChess.push([...lastPlaced, chess[lastPlaced[0]][lastPlaced[1]], counters[lastPlaced[0]][lastPlaced[1]]]);
             chess[lastPlaced[0]][lastPlaced[1]] = 'empty';
             counters[lastPlaced[0]][lastPlaced[1]] = 0;
         }
         setChess([...chess]);
         setChessPlaced([...chessPlaced]);
         setCounters([...counters]);
+        setRegretChess([...regretChess]);
     };
+
+    const cancelRegret = () => {
+        if (regretChess.length < 2) return;
+        for (let i = 0; i < 2; i++) {
+            const lastRegretted = regretChess.pop();
+            chess[lastRegretted[0]][lastRegretted[1]] = lastRegretted[2];
+            counters[lastRegretted[0]][lastRegretted[1]] = lastRegretted[3];
+            chessPlaced.push([lastRegretted[0], lastRegretted[1]]);
+        }
+        setChess([...chess]);
+        setChessPlaced([...chessPlaced]);
+        setCounters([...counters]);
+        setRegretChess([...regretChess]);
+    }
 
     const reset = () => {
         setChess(Array(BOARD_SIZE).fill('').map(_ => Array(BOARD_SIZE).fill('empty')));
         setGameState(GAME_STATE.BLACK_TURN);
         setChessPlaced([]);
         setCounters(Array(BOARD_SIZE).fill('').map(_ => Array(BOARD_SIZE).fill(0)));
+        setRegretChess([]);
     };
 
     return (
@@ -142,7 +160,9 @@ const Gomoku = () => {
                 >
                     重新开始
                 </button>
-                <button className='btn btn-secondary text' onClick={regret} disabled={chessPlaced.length < 2}>悔棋
+                <button className='btn btn-secondary text' onClick={cancelRegret} disabled={regretChess.length < 2}>撤销悔棋
+                </button>
+                <button className='btn btn-ready text' onClick={regret} disabled={chessPlaced.length < 2}>悔棋
                 </button>
             </div>
         </div>
